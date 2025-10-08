@@ -105,16 +105,18 @@
       (document.getElementById('globeViz'));
 
     // Tooltip interaction
-    globe.onLabelHover((label, event, coords) => {
-      if (label) {
-        tooltip.style.left = `${coords.x}px`;
-        tooltip.style.top = `${coords.y}px`;
-        tooltip.innerHTML = label.text;
-        tooltip.style.display = 'block';
-      } else {
-        tooltip.style.display = 'none';
-      }
-    });
+// 🧭 Tooltip interaction on hover (safe)
+globe.onLabelHover((label, event, coords) => {
+  if (label && coords) {
+    tooltip.style.left = `${coords.x}px`;
+    tooltip.style.top = `${coords.y}px`;
+    tooltip.innerHTML = label.text;
+    tooltip.style.display = 'block';
+  } else {
+    tooltip.style.display = 'none';
+  }
+});
+
 
     // Optional: slow rotation
     (function rotate() {
