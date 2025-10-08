@@ -33,18 +33,60 @@
   <div id="globeViz"></div>
   <div class="globe-tooltip" id="tooltip"></div>
 
-  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/globe.gl"></script>
-  <script>
-    const tooltip = document.getElementById('tooltip');
+ <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+<script src="https://unpkg.com/globe.gl"></script>
+<script>
+  const tooltip = document.getElementById('tooltip');
 
-    const facts = [
-      { lat: -3.4653, lng: -62.2159, text: "🌱 The Amazon rainforest produces about 20% of the world's oxygen." },
-      { lat: 60.0, lng: -95.0, text: "❄️ The Arctic is warming 4x faster than the rest of the planet." },
-      { lat: -25.0, lng: 133.0, text: "🦘 Australia has unique ecosystems vulnerable to climate shifts." },
-      { lat: 28.0, lng: 84.0, text: "🏔️ The Himalayas are crucial for freshwater supply to over 1.5B people." },
-      { lat: 23.0, lng: 79.0, text: "💧 Groundwater depletion in India is among the fastest globally." },
-      { lat: 35.0, lng: -100.0, text: "🌪️ Great Plains experience increasing drought frequency." },
+  const facts = [
+    { lat: -3.4653, lng: -62.2159, text: "🌱 The Amazon rainforest produces about 20% of the world's oxygen." },
+    { lat: 60.0, lng: -95.0, text: "❄️ The Arctic is warming 4x faster than the rest of the planet." },
+    { lat: -25.0, lng: 133.0, text: "🦘 Australia has unique ecosystems vulnerable to climate shifts." },
+    { lat: 28.0, lng: 84.0, text: "🏔️ The Himalayas are crucial for freshwater supply to over 1.5B people." },
+    { lat: 23.0, lng: 79.0, text: "💧 Groundwater depletion in India is among the fastest globally." },
+    { lat: 35.0, lng: -100.0, text: "🌪️ Great Plains experience increasing drought frequency." },
+  ];
+
+  const Globe = window.Globe;
+  const globe = Globe()
+    .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+    .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+    .backgroundColor('rgba(0,0,0,0)')
+    .pointOfView({ lat: 20, lng: 0, altitude: 2.5 })
+    .labelsData(facts)
+    .labelLat(d => d.lat)
+    .labelLng(d => d.lng)
+    .labelText(() => '❓') // Green question mark
+    .labelSize(2)
+    .labelColor(() => 'rgba(0,255,0,0.8)')
+    .labelResolution(2)
+    (document.getElementById('globeViz'));
+
+  // 🧭 Tooltip interaction on hover
+  globe.onLabelHover((label, event, coords) => {
+    if (label) {
+      tooltip.style.left = `${coords.x}px`;
+      tooltip.style.top = `${coords.y}px`;
+      tooltip.innerHTML = label.text;
+      tooltip.style.display = 'block';
+    } else {
+      tooltip.style.display = 'none';
+    }
+  });
+
+  // ✨ Fix: Action on label click
+  globe.onLabelClick((label) => {
+    if (label) {
+      // You can replace alert with a nicer popup later
+      alert(label.text);
+    }
+  });
+
+  // 🌍 Smooth auto rotation
+  globe.controls().autoRotate = true;
+  globe.controls().autoRotateSpeed = 0.6;
+</script>
+
     ];
 
     const Globe = window.Globe;
